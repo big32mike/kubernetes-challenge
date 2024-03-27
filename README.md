@@ -21,4 +21,5 @@ Ultimately I decided to get an MVP running, and then refactor things to be more 
 - Since there's one deployment file, `website-deployment` I'll initially add both containers there. This isn't ideal, you don't want to restart/reload the db every time the pod restarts for example, but we can refactor later.
      - This means we'll add a HostAlias to the webapp pod for `mysql-service`
 - created a configMap for the load script and one for a script to setup the ecomuser
+  - created a Volume and mount for the scripts
 - created a Secret for `MARIADB_ROOT_PASSWORD`

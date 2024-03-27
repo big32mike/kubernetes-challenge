@@ -7,7 +7,7 @@ data:
     mariadb -p${MARIADB_ROOT_PASSWORD} -e 'create database `ecomdb`;'
     mariadb -p${MARIADB_ROOT_PASSWORD} -e "create user 'ecomuser'@'%' identified by 'ecompassword';"
     mariadb -p${MARIADB_ROOT_PASSWORD} -e "grant all privileges on \`ecomdb\`.* to 'ecomuser'@'%';"
-    mariadb -p${MARIADB_ROOT_PASSWORD} < /config/db-load-script.sql
+    mariadb -p${MARIADB_ROOT_PASSWORD} < /db-init/db-load-script.sql
   db-load-script.sql: |+
     USE ecomdb;
     CREATE TABLE products (id mediumint(8) unsigned NOT NULL auto_increment,Name varchar(255) default NULL,Price varchar(255) default NULL, ImageUrl varchar(255) default NULL,PRIMARY KEY (id)) AUTO_INCREMENT=1;

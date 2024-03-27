@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: ecom-web
+  name: ecom-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ecom-web
+  template:
+    metadata:
+      labels:
+        app: ecom-web
+    spec:
+      containers:
+      - image: michaeljwhite/ecom-web:v1
+        name: ecom-web
+        ports:
+        - containerPort: 80
+      - image: mariadb
+        name: mariadb
+        ports:
+        - containerPort: 3306
+        volumeMounts:
+          - mountPath: /db-init
+            name: db-init
+        env:
+        - name: MARIADB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mariadb-creds
+              key: root-password
+      volumes:
+        - name: db-init
+          configMap:
+            name: db-init
+            items:
+            - key: db-create-script.sh
+              path: db-create-script.sh
+            - key: db-load-script.sql
+              path: db-load-script.sql
+      hostAliases:
+      - ip: "127.0.0.1"
+        hostnames:
+        -  "mysql-service"
