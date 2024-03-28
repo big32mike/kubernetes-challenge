@@ -29,3 +29,20 @@ Since there's one deployment file, `website-deployment` we'll run in one pod wit
 - created a Secret for `MARIADB_ROOT_PASSWORD`
 
 ## Step 3: Set Up Kubernetes on a Public Cloud Provider
+
+### AWS EKS
+
+Once the AWS CLI was installed and configured to use my free tier account, I created a new cluster with `eksctl`.
+- [Getting started with `eksctl`](https://docs.aws.amazon.com/eks/latest/userguide/getting-started-eksctl.html)
+  - `eksctl` uses CloudFormation under the hood to provision [Stacks](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacks.html) (and underlying cluster resources).
+  - There's a stack for the cluster and one for the managed nodegroup
+
+```sh
+$ eksctl get cluster
+NAME     REGION          EKSCTL CREATED
+eks-crc us-east-1       True
+
+$ eksctl get nodegroup --cluster eks-crc
+CLUSTER  NODEGROUP  STATUS  CREATED               MIN  SIZE  MAX  SIZE      DESIRED     CAPACITY                                        INSTANCE  TYPE  IMAGE  ID  ASG  NAME  TYPE
+eks-crc  nodes      ACTIVE  2024-03-28T13:25:36Z  1    3     3    t2.micro  AL2_x86_64  eks-nodes-d2c7429e-5f90-5947-1e87-db94d286bcce  managed
+```
