@@ -46,3 +46,21 @@ $ eksctl get nodegroup --cluster eks-crc
 CLUSTER  NODEGROUP  STATUS  CREATED               MIN  SIZE  MAX  SIZE      DESIRED     CAPACITY                                        INSTANCE  TYPE  IMAGE  ID  ASG  NAME  TYPE
 eks-crc  nodes      ACTIVE  2024-03-28T13:25:36Z  1    3     3    t2.micro  AL2_x86_64  eks-nodes-d2c7429e-5f90-5947-1e87-db94d286bcce  managed
 ```
+
+## Step 4: Deploy Your Website to Kubernetes
+
+ ```
+ kubectl create -f db-init-cm.yaml
+ kubectl create -f mariadb-creds-secret.yaml
+ kubectl create -f website-deployment.yaml
+ kubectl exec -it  <pod name> -c mariadb -- bash
+ sh /db-init/db-create-script.sh
+ ```
+
+## Step 5: Expose Your Website
+
+I used `kubectl expose` to generate the `website-service.yaml` files to tie the service to the ecom-web deployment. 
+
+```
+kubectl expose --type=LoadBalancer deployments.apps ecom-web --port=80 --target-port=80 --name website-service --dry-run=client -o yaml
+```
